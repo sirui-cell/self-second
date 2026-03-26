@@ -111,14 +111,15 @@ def top_holders(pump_token):
         return []
 
 if __name__ == "__main__":
-    wallet_addr= ''
     url = 'https://gmgn.ai/api/v1/rank/sol/swaps/24h?device_id=3e417959-0b07-4169-881d-2e2beb11791f&fp_did=2e0207aac1641053e8c014ed0945c9d0&client_id=gmgn_web_20260306-11434-42d387e&from_app=gmgn&app_ver=20260306-11434-42d387e&tz_name=Asia%2FShanghai&tz_offset=28800&app_lang=zh-CN&os=web&worker=0&orderby=creation_timestamp&direction=desc&filters[]=renounced&filters[]=frozen'
-    pump_token = 'AxeAwYdjkBGwSZtKyA9eAWoAyqGE9bj575fLYqF85qxJ'
-    #bal = sol_balance(wallet_addr)
-    #print(f"Sol balance for {wallet_addr}: {bal}")
+
     pump_addresses_list = pump_addresses(url)
     print(f"Pump addresses: {pump_addresses_list[0]}")
-    #top_traders_list = top_traders(pump_token)
-    #print(f"Top traders: {top_traders_list[0]}")
-    #top_holders_list = top_holders(pump_token)
-    #print(f"Top holders: {top_holders_list[0]}")
+    pump_token = pump_addresses_list[0]
+    top_traders_list = top_traders(pump_token)
+    print(f"Top traders: {top_traders_list[0]}")
+    top_holders_list = top_holders(pump_token)
+    print(f"Top holders: {top_holders_list[0]}")
+    wallet_addr = top_traders_list[0]
+    bal = sol_balance(wallet_addr)
+    print(f"Sol balance for {wallet_addr}: {bal}")
