@@ -115,7 +115,7 @@ if __name__ == "__main__":
 
     pump_addresses_list = pump_addresses(url)
     print(f"Pump addresses: {pump_addresses_list[0]}")
-    pump_token = pump_addresses_list[0]
+    pump_token = '2rcag4mFqDeozcdn9gCtKAX87jCnwqGy31fRjg3upump'
     top_traders_list = top_traders(pump_token)
     print(f"Top traders: {top_traders_list[0]}")
     top_holders_list = top_holders(pump_token)
