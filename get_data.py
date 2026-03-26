@@ -109,3 +109,6 @@ def top_holders(pump_token):
     except Exception as err:
         print(f"Error occurred: {err}")
         return []
+
+if __name__ == "__main__":
+    
