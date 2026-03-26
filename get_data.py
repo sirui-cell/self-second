@@ -1,6 +1,35 @@
+import json
+from curl_cffi import requests
+import time
+from datetime import datetime, timedelta
+import os
+
+def get_header():
+    """返回请求头信息"""
+    return {
+        "accept": "application/json, text/plain, */*",
+        "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7,ja;q=0.6,ar;q=0.5,ru;q=0.4,kk;q=0.3,uz;q=0.2,th;q=0.1,mt;q=0.1,da;q=0.1",
+        "baggage": "sentry-environment=production,sentry-release=20250806-2043-a5aa1db,sentry-public_key=93c25bab7246077dc3eb85b59d6e7d40,sentry-trace_id=327626096bea4374aaca67faf862e50a,sentry-sample_rate=0.01,sentry-sampled=false",
+        "priority": "u=1, i",
+        "sec-ch-ua": "\"Not)A;Brand\";v=\"8\", \"Chromium\";v=\"138\", \"Google Chrome\";v=\"138\"",
+        "sec-ch-ua-arch": "\"arm\"",
+        "sec-ch-ua-bitness": "\"64\"",
+        "sec-ch-ua-full-version": "\"138.0.7204.184\"",
+        "sec-ch-ua-full-version-list": "\"Not)A;Brand\";v=\"8.0.0.0\", \"Chromium\";v=\"138.0.7204.184\", \"Google Chrome\";v=\"138.0.7204.184\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-model": "\"\"",
+        "sec-ch-ua-platform": "\"macOS\"",
+        "sec-ch-ua-platform-version": "\"15.5.0\"",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "sentry-trace": "327626096bea4374aaca67faf862e50a-b6c23760667a3a70-0",
+        "Referer": "https://gmgn.ai/sol/address/3fFt9FLwcDEu4tCoVy7gk96By1XTwNntEo58NqhrKRjk"
+    }
+
 def sol_balance(wallet_address):
     url = f"https://gmgn.ai/defi/quotation/v1/smartmoney/sol/walletNew/{wallet_address}"
-    
+
     try:
         response = requests.get(url,headers=get_header(), impersonate="chrome124")
         response.raise_for_status()
