@@ -42,7 +42,7 @@ def sol_balance(wallet_address):
         print(f"An unexpected error occurred: {str(e)}")
         return None
 
-def pump_addresses(url=url_24h):
+def pump_addresses(url):
     
     try:
         response = requests.get(url,headers=get_header(), impersonate= "chrome124")
