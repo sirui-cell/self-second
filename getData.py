@@ -30,7 +30,7 @@ def get_header():
 
 def holdings(wallet_address):
     try:
-        response = requests.get(c.url_holding,headers=get_header(), impersonate="chrome124")
+        response = requests.get(c.get_url_holding(wallet_address),headers=get_header(), impersonate="chrome124")
         response.raise_for_status()
         if not response.content:
             print(f"{address}响应内容为空")
@@ -54,7 +54,7 @@ def holdings(wallet_address):
         
 def sol_balance(wallet_address):
     try:
-        response = requests.get(c.url_balance,headers=get_header(), impersonate="chrome124")
+        response = requests.get(c.get_url_balance(wallet_address),headers=get_header(), impersonate="chrome124")
         response.raise_for_status()
         data = response.json()
         if data.get("code") == 0:
@@ -89,7 +89,7 @@ def pump_addresses(url):
 def top_traders(pump_token):
     """获取所有 top traders 的 address"""
     try:
-        response = requests.get(c.url_traders,headers=get_header(), impersonate="chrome124")
+        response = requests.get(c.get_url_traders(pump_token),headers=get_header(), impersonate="chrome124")
         time.sleep(3)
         response.raise_for_status()  # 检查请求是否成功
         data = response.json()  # 解析JSON响应
@@ -110,7 +110,7 @@ def top_traders(pump_token):
 
 def top_holders(pump_token):
     try:
-        response = requests.get(c.url_holders,headers=get_header(), impersonate="chrome124")
+        response = requests.get(c.get_url_holders(pump_token),headers=get_header(), impersonate="chrome124")
         response.raise_for_status()  # 检查请求是否成功
         time.sleep(3)
         data = response.json()  # 将响应内容解析为 JSON 格式
