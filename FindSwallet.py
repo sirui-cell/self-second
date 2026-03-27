@@ -3,9 +3,9 @@ from curl_cffi import requests
 import time
 from datetime import datetime, timedelta
 import os
-import config as f
+import config as c
 import getData as g
-import handleFile as h
+import fileHandle as f
 
 def ProfitIndicators(wallet_assets):
     # 数据验证
@@ -121,10 +121,9 @@ def main():
     yesteday_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
     yesteday_filename = f"{yesteday_date}_15.txt"
     result_list = f.process_file(yesteday_filename) #读取昨天符合标准的wallets列表
-    pump_file_path = "pump.txt"
     #begin 
 
-    f.send_message_via_telegram(BOT_TOKEN, CHAT_ID, 'begin get wallets' + '\n')
+    f.send_message_via_telegram(c.BOT_TOKEN, c.CHAT_ID, 'begin get wallets' + '\n')
     
     #获取满足市值的pump
     while True:
@@ -172,7 +171,7 @@ def main():
                     result_list.append(wallet)
                     result = f'{wallet} {pnl}'
                     result_tg = f'https://gmgn.ai/sol/address/{wallet}   {pnl}'
-                    f.send_message_via_telegram(BOT_TOKEN, CHAT_ID, result_tg + '\n')
+                    f.send_message_via_telegram(c.BOT_TOKEN, c.CHAT_ID, result_tg + '\n')
                     print(result)
                     with open(filename, 'a') as file:
                         file.write(result + '\n')
