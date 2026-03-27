@@ -3,6 +3,7 @@ from curl_cffi import requests
 import time
 from datetime import datetime, timedelta
 import os
+import config as c
 
 def get_header():
     """返回请求头信息"""
@@ -28,10 +29,8 @@ def get_header():
     }
 
 def sol_balance(wallet_address):
-    url = f"https://gmgn.ai/defi/quotation/v1/smartmoney/sol/walletNew/{wallet_address}"
-
     try:
-        response = requests.get(url,headers=get_header(), impersonate="chrome124")
+        response = requests.get(c.url_balance,headers=get_header(), impersonate="chrome124")
         response.raise_for_status()
         data = response.json()
         if data.get("code") == 0:
@@ -65,10 +64,8 @@ def pump_addresses(url):
 
 def top_traders(pump_token):
     """获取所有 top traders 的 address"""
-    url = f'https://gmgn.ai/vas/api/v1/token_traders/sol/{pump_token}?device_id=da3364a3-2401-4a0f-a831-5482badd4a9b&fp_did=4e26fa883280531007b76beddc66924b&client_id=gmgn_web_20250921-4228-b63b95b&from_app=gmgn&app_ver=20250921-4228-b63b95b&tz_name=Asia%2FShanghai&tz_offset=28800&app_lang=zh-CN&os=web&limit=100&orderby=profit&direction=desc'
-    
     try:
-        response = requests.get(url,headers=get_header(), impersonate="chrome124")
+        response = requests.get(c.url_traders,headers=get_header(), impersonate="chrome124")
         time.sleep(3)
         response.raise_for_status()  # 检查请求是否成功
         data = response.json()  # 解析JSON响应
@@ -88,10 +85,8 @@ def top_traders(pump_token):
         return []
 
 def top_holders(pump_token):
-    url = f'https://gmgn.ai/vas/api/v1/token_holders/sol/{pump_token}?device_id=da3364a3-2401-4a0f-a831-5482badd4a9b&fp_did=4e26fa883280531007b76beddc66924b&client_id=gmgn_web_20250921-4228-b63b95b&from_app=gmgn&app_ver=20250921-4228-b63b95b&tz_name=Asia%2FShanghai&tz_offset=28800&app_lang=zh-CN&os=web&limit=100&cost=20&orderby=amount_percentage&direction=desc'
-    
     try:
-        response = requests.get(url,headers=get_header(), impersonate="chrome124")
+        response = requests.get(c.url_holders,headers=get_header(), impersonate="chrome124")
         response.raise_for_status()  # 检查请求是否成功
         time.sleep(3)
         data = response.json()  # 将响应内容解析为 JSON 格式
@@ -111,9 +106,7 @@ def top_holders(pump_token):
         return []
 
 if __name__ == "__main__":
-    url = 'https://gmgn.ai/api/v1/rank/sol/swaps/24h?device_id=3e417959-0b07-4169-881d-2e2beb11791f&fp_did=2e0207aac1641053e8c014ed0945c9d0&client_id=gmgn_web_20260306-11434-42d387e&from_app=gmgn&app_ver=20260306-11434-42d387e&tz_name=Asia%2FShanghai&tz_offset=28800&app_lang=zh-CN&os=web&worker=0&orderby=creation_timestamp&direction=desc&filters[]=renounced&filters[]=frozen'
-
-    pump_addresses_list = pump_addresses(url)
+    pump_addresses_list = pump_addresses(c.url_24h)
     print(f"Pump addresses: {pump_addresses_list[0]}")
     pump_token = '2rcag4mFqDeozcdn9gCtKAX87jCnwqGy31fRjg3upump'
     top_traders_list = top_traders(pump_token)
