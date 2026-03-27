@@ -1,7 +1,7 @@
 from curl_cffi import requests
 import time
 from datetime import datetime, timedelta
-
+import os
 
 def read_file(file_path):
     """从文件读取 pump 列表"""
