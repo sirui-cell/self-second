@@ -19,7 +19,7 @@ def read_file(file_path):
 def write_file(file_path, data):
     """将 pump_reslut 写入文件"""
     try:
-        with open(file_path, 'w') as file:
+        with open(file_path, 'a') as file:
             for item in data:
                 file.write(f"{item}\n")
     except Exception as e:
