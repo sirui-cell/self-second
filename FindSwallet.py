@@ -175,7 +175,7 @@ def main():
                     f.send_message_via_telegram(c.BOT_TOKEN, c.CHAT_ID, result_tg + '\n')
                     print(result)
                     f.write_file(filename, result)
-    f.send_message_via_telegram(BOT_TOKEN, CHAT_ID, 'all done！' + '\n')    
+    f.send_message_via_telegram(c.BOT_TOKEN, c.CHAT_ID, 'all done！' + '\n')    
     
 if __name__ == "__main__":
     main()
