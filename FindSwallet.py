@@ -121,7 +121,7 @@ def main():
     filename = f"{current_dir}/sol/{current_date}_15.txt"
     yesteday_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
     yesteday_filename = f"{current_dir}/sol/{yesteday_date}_15.txt"
-    result_list = f.process_file(yesteday_filename) #读取昨天符合标准的wallets列表
+    result_list = f.handle_file(yesteday_filename) #读取昨天符合标准的wallets列表
     #begin 
 
     f.send_message_via_telegram(c.BOT_TOKEN, c.CHAT_ID, 'begin get wallets' + '\n')
