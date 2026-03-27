@@ -72,36 +72,22 @@ def ProfitIndicators(wallet_assets):
     return False
 
 def isSmartWallet(address):
-    url = f'https://gmgn.ai/pf/api/v1/wallet/sol/{address}/holdings?device_id=3e417959-0b07-4169-881d-2e2beb11791f&fp_did=2e0207aac1641053e8c014ed0945c9d0&client_id=gmgn_web_20260105-9509-b9c2d27&from_app=gmgn&app_ver=20260105-9509-b9c2d27&tz_name=Asia%2FShanghai&tz_offset=28800&app_lang=zh-CN&os=web&worker=0&limit=50&order_by=last_active_timestamp&direction=desc&hide_airdrop=true&hide_abnormal=false&hide_closed=false&sellout=true&showsmall=true&tx30d=true'
-
+    
     try:
         bal = g.sol_balance(address)
         if bal == 0:
             #send_message_via_telegram(BOT_TOKEN, CHAT_ID, f"{address}bal 为 0,不满足\n")
             print(f"{address}bal 为 0,不满足")
             return False
-            
-        response = requests.get(url, headers=g.get_header(), impersonate="chrome124")
-        response.raise_for_status()  # 检查请求是否成功
-        time.sleep(1)  # 适当延迟，避免过度请求
-        # 检查响应内容
-        if not response.content:
-            print(f"{address}响应内容为空")
+        
+        holdings = g.holdings(address) 
+        if holdings is None:
             return False
+        else:
+            all_count = len(holdings)        
+            if all_count < 2:
+                return False
         
-        data=response.json()
-
-        trades = data['data']['list']   
-        if not trades:
-            print(f"{address}没有持仓数据")
-            return False
-        
-        all_count = len(trades)
-        
-        if all_count < 2:
-            return False
-        
-
         evaluate = ProfitIndicators(trades)
         return evaluate
 
