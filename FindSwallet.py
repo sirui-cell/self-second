@@ -4,7 +4,7 @@ import time
 from datetime import datetime, timedelta
 import os
 
-def evaluate_wallet_assets(wallet_assets):
+def ProfitIndicators(wallet_assets):
     # 数据验证
     if not isinstance(wallet_assets, list) or not wallet_assets:
         raise ValueError("wallet_assets 应为非空列表")
@@ -99,7 +99,7 @@ def isSmartWallet(address):
             return False
         
 
-        evaluate = evaluate_wallet_assets(trades)
+        evaluate = ProfitIndicators(trades)
         return evaluate
 
     except requests.exceptions.HTTPError as http_err:
