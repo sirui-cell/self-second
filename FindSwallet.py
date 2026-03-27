@@ -3,6 +3,9 @@ from curl_cffi import requests
 import time
 from datetime import datetime, timedelta
 import os
+import config as f
+import getData as g
+import handleFile as h
 
 def ProfitIndicators(wallet_assets):
     # 数据验证
@@ -117,51 +120,42 @@ def main():
     filename = f"{current_date}_15.txt"
     yesteday_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
     yesteday_filename = f"{yesteday_date}_15.txt"
-    result_list = process_file(yesteday_filename) #读取符合标准的wallets列表
+    result_list = f.process_file(yesteday_filename) #读取昨天符合标准的wallets列表
     pump_file_path = "pump.txt"
     #begin 
 
-    send_message_via_telegram(BOT_TOKEN, CHAT_ID, 'begin get wallets' + '\n')
+    f.send_message_via_telegram(BOT_TOKEN, CHAT_ID, 'begin get wallets' + '\n')
     
     #获取满足市值的pump
     while True:
-        apump = get_base_addresses_with_high_market_cap(url_1h)
-        bonk = get_base_addresses_with_high_market_cap(url_24h)
-        #moon = get_base_addresses_with_high_market_cap(url_moon)
-        if len(apump) > 0:
+        pump_1h = g.pump_addresses(url_1h)
+        pump_24h = g.pump_addresses(url_24h)
+        merged_pump = list(set(pump_1h) | set(pump_24h))
+        if len(merged_pump) > 0:
             break
         else:
             print('无法获取代币pump，等待15秒再试')
             time.sleep(1)
-    pumps = list(set(apump + bonk))
-    pump = read_pump_file(pump_file_path)
-    pump_reslut = list(set(pumps) - set(pump)) #去掉已找过的pump
-    l = len(pump_reslut) 
-    pump_reslut2 = list(set(pumps) | set(pump))
-    write_pump_file(pump_file_path, pump_reslut2) #合并pumps写入已找pump文件    
-    time.sleep(1)  
-    #遍历每个pump中的每个wallet
-    for pump in pumps:
+    for pump in merged_pump:
         while True:
-            wallets1 = get_top_traders_addresses(pump)
-            if len(wallets1) > 0:
+            top_traders_wallets = g.top_traders(pump)
+            if len(top_traders_wallets) > 0:
                 break
             else:
                 print('无法获取代币pump的traders钱包地址，请等待10秒后再试')
                 time.sleep(1)
         while True:
-            wallets2 = get_top_holders_addresses(pump)
-            if len(wallets2) > 0:
+            top_holders_wallets = g.top_holders(pump)
+            if len(top_holders_wallets) > 0:
                 break
             else:
                 print('无法获取代币pump的holders钱包地址，请等待10秒后再试')
                 time.sleep(1)
                             
         #获取当前pump中的最终wallets
-        wallets = list(set(wallets1) | set(wallets2))
+        wallets = list(set(top_traders_wallets) | set(top_holders_wallets))
               
         #检查钱包是否符合设置的标准，符合就输出
-        print(len(wallets))
         for wallet in wallets:
             if wallet not in result_list:
                 i = 0
@@ -178,12 +172,12 @@ def main():
                     result_list.append(wallet)
                     result = f'{wallet} {pnl}'
                     result_tg = f'https://gmgn.ai/sol/address/{wallet}   {pnl}'
-                    send_message_via_telegram(BOT_TOKEN, CHAT_ID, result_tg + '\n')
+                    f.send_message_via_telegram(BOT_TOKEN, CHAT_ID, result_tg + '\n')
                     print(result)
                     with open(filename, 'a') as file:
                         file.write(result + '\n')
                 time.sleep(1)
-    send_message_via_telegram(BOT_TOKEN, CHAT_ID, 'all done！' + '\n')    
+    f.send_message_via_telegram(BOT_TOKEN, CHAT_ID, 'all done！' + '\n')    
     
 if __name__ == "__main__":
     main()
