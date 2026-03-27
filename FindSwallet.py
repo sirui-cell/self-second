@@ -117,9 +117,10 @@ def isSmartWallet(address):
       
 def main():
     current_date = datetime.now().strftime('%Y-%m-%d')
-    filename = f"{current_date}_15.txt"
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    filename = f"{current_dir}/sol/{current_date}_15.txt"
     yesteday_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
-    yesteday_filename = f"{yesteday_date}_15.txt"
+    yesteday_filename = f"{current_dir}/sol/{yesteday_date}_15.txt"
     result_list = f.process_file(yesteday_filename) #读取昨天符合标准的wallets列表
     #begin 
 
@@ -173,9 +174,7 @@ def main():
                     result_tg = f'https://gmgn.ai/sol/address/{wallet}   {pnl}'
                     f.send_message_via_telegram(c.BOT_TOKEN, c.CHAT_ID, result_tg + '\n')
                     print(result)
-                    with open(filename, 'a') as file:
-                        file.write(result + '\n')
-                time.sleep(1)
+                    f.write_file(filename, result)
     f.send_message_via_telegram(BOT_TOKEN, CHAT_ID, 'all done！' + '\n')    
     
 if __name__ == "__main__":
