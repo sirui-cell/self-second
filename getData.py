@@ -33,23 +33,23 @@ def holdings(wallet_address):
         response = requests.get(c.get_url_holding(wallet_address),headers=get_header(), impersonate="chrome124")
         response.raise_for_status()
         if not response.content:
-            print(f"{address}响应内容为空")
+            print(f"{wallet_address}响应内容为空")
             return None
         data = response.json()
         trades = data['data']['list']   
         if not trades:
-            print(f"{address}没有持仓数据")
+            print(f"{wallet_address}没有持仓数据")
             return None
         return trades
         
     except requests.exceptions.HTTPError as http_err:
-        print(f"HTTP error occurred for address {address}: {http_err}")
+        print(f"HTTP error occurred for address {wallet_address}: {http_err}")
         return None  # 返回 None 表示出现错误
     except ValueError as json_err:
-        print(f"JSON decode error for address {address}: {json_err}")
+        print(f"JSON decode error for address {wallet_address}: {json_err}")
         return None  # 返回 None 表示出现错误
     except Exception as err:
-        print(f"An error occurred for address {address}: {err}")
+        print(f"An error occurred for address {wallet_address}: {err}")
         return False  # 返回 None 表示出现错误
         
 def sol_balance(wallet_address):
