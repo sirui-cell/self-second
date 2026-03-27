@@ -81,7 +81,7 @@ def isSmartWallet(address):
             print(f"{address}bal 为 0,不满足")
             return False
             
-        response = requests.get(url, headers=get_header(), impersonate="chrome124")
+        response = requests.get(url, headers=g.get_header(), impersonate="chrome124")
         response.raise_for_status()  # 检查请求是否成功
         time.sleep(1)  # 适当延迟，避免过度请求
         # 检查响应内容
