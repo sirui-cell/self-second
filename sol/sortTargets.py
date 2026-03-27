@@ -1,33 +1,36 @@
-import MN_API as mn
 import sys
 from datetime import datetime, timedelta
 
 # Telegram Bot 配置（可提取到配置文件或环境变量中）
 BOT_TOKEN = "YOUR_BOT_TOKEN"  # 请替换为您的 Bot Token
 CHAT_ID = -1002604809472
-
+def write_file(file_path, data):
+    """将 pump_reslut 写入文件"""
+    try:
+        with open(file_path, 'a') as file:
+            for item in data:
+                file.write(f"{item}\n")
+    except Exception as e:
+        print(f"Error writing to file: {e}")
+        
 def parse_file(filename):
     wallet_dict = {}
-
     try:
         with open(filename, 'r', encoding='utf-8') as f:
             for line in f:
                 line = line.strip()
                 if not line:
                     continue
-
                 # 分割 wallet 和括号内容
                 parts = line.split(' ', 1)
                 if len(parts) < 2:
                     continue
-
                 wallet = parts[0]
                 content = parts[1].strip('()')
 
                 values = [v.strip() for v in content.split(',')]
                 if len(values) != 3:
                     continue
-
                 try:
                     count_total = int(values[0])
                     count_five = int(values[1])
@@ -35,11 +38,9 @@ def parse_file(filename):
                 except ValueError as e:
                     print(f"数据解析错误：{values} - {e}")
                     continue
-
                 # 只保留第一次出现的钱包地址
                 if wallet not in wallet_dict:
                     wallet_dict[wallet] = (count_total, count_five, one_rate)
-
         return wallet_dict
 
     except FileNotFoundError:
@@ -75,8 +76,8 @@ def main(filename=None):
                     for wallet, data in sorted_wallets]
     url_filename = filename.replace('_15.txt', '_url.txt')
     # 写入文件
-    mn.write_file(filename, output_lines)
-    mn.write_file(url_filename, output_url)
+    write_file(filename, output_lines)
+    write_file(url_filename, output_url)
 
     # 可选：发送到 Telegram（取消注释即可启用）
     # for line in output_lines:
