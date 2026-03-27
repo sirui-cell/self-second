@@ -128,8 +128,8 @@ def main():
     
     #获取满足市值的pump
     while True:
-        pump_1h = g.pump_addresses(url_1h)
-        pump_24h = g.pump_addresses(url_24h)
+        pump_1h = g.pump_addresses(c.url_1h)
+        pump_24h = g.pump_addresses(c.url_24h)
         merged_pump = list(set(pump_1h) | set(pump_24h))
         if len(merged_pump) > 0:
             break
